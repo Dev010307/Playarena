@@ -1,11 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    String user = (String) session.getAttribute("username");
 
-    if (user == null) {
-        response.sendRedirect("../visiter/index.jsp");
-    }
-%>
 <!DOCTYPE html>
 <html lang="en">
  <head>
@@ -27,7 +21,6 @@
 <body>
 
 <jsp:include page="head.jsp" />
-
 <!-- ===== PAGE HEADER ===== -->
 <section class="page-header">
   <div class="container">
@@ -133,8 +126,8 @@
       </section>
 </section>
 
-<!-- ===== FOOTER ===== -->
-<jsp:include page="../visiter/footer.jsp" />
+<jsp:include page="footer.jsp" />
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

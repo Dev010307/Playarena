@@ -1,12 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    String user = (String) session.getAttribute("username");
-
-    if (user == null) {
-        response.sendRedirect("../visiter/index.jsp");
-    }
-%>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,12 +11,38 @@
 
 <!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../visiter/style.css"/>
+<link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
 
-<jsp:include page="head.jsp" />
+<!-- ===== NAVBAR (ABOUT ACTIVE) ===== -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="index.jsp">PlayArena</a>
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="index.jsp">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="services.jsp">Services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="about.jsp">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="login.jsp">Login</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
 <!-- ===== PAGE HEADER ===== -->
 <section class="page-header">
   <div class="container">
@@ -71,7 +89,7 @@
   </div>
 </section>
 
-<jsp:include page="../visiter/footer.jsp" />
+<jsp:include page="footer.jsp" />
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

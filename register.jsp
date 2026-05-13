@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>PlayArena | Login</title>
+<title>PlayArena | Register</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Bootstrap -->
@@ -11,6 +11,7 @@
 
 <!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css"/>
 </head>
 
@@ -18,12 +19,12 @@
   
 <jsp:include page="head.jsp" />
 
-<!-- ===== LOGIN FORM ===== -->
+<!-- ===== REGISTER FORM ===== -->
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-md-5 col-lg-4">
+    <div class="col-md-6 col-lg-5">
 
-      <div class="login-card">
+      <div class="register-card">
 
         <!-- ===== MESSAGE BOX (ONLY ADDITION) ===== -->
         <%
@@ -36,34 +37,43 @@
         </div>
         <% } %>
 
-        <h3 class="text-center mb-4">Login</h3>
+        <h3 class="auth-title text-center mb-4">Create Account</h3>
 
-        <form action="login1.jsp" method="post">
+        <form action="j4.jsp" method="post">
+
+          <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="name" class="form-control" required>
+          </div>
 
           <div class="mb-3">
             <label class="form-label">Email Address</label>
             <input type="email" name="email" class="form-control" required>
           </div>
 
+          <!-- PASSWORD -->
           <div class="mb-3 position-relative">
             <label class="form-label">Password</label>
             <input type="password" name="password" id="password" class="form-control pe-5" required>
             <span class="password-toggle" onclick="togglePassword()">👁</span>
           </div>
 
-          <div class="d-flex justify-content-between mb-3">
-            <a href="forgot.jsp" class="auth-link">Forgot Password?</a>
+          <!-- CONFIRM PASSWORD -->
+          <div class="mb-3 position-relative">
+            <label class="form-label">Confirm Password</label>
+            <input type="password" name="confirm_password" id="confirmPassword" class="form-control pe-5" required>
+            <span class="password-toggle" onclick="toggleConfirmPassword()">👁</span>
           </div>
 
-          <button type="submit" class="btn btn-login w-100 text-white">
-            Login
+          <button type="submit" class="btn btn-register w-100 text-white">
+            Register
           </button>
         </form>
 
         <div class="text-center mt-4">
           <p class="mb-0">
-            Don’t have an account?
-            <a href="register.jsp" class="auth-link">Register</a>
+            Already have an account?
+            <a href="login.jsp" class="auth-link">Login</a>
           </p>
         </div>
 
@@ -72,15 +82,16 @@
     </div>
   </div>
 </div>
-
-<!-- ===== FOOTER ===== -->
-
 <jsp:include page="footer.jsp" />
 
-<!-- ===== SHOW / HIDE PASSWORD SCRIPT ===== -->
+<!-- ===== JS FOR SHOW / HIDE PASSWORD ===== -->
 <script>
 function togglePassword(){
     const pass = document.getElementById("password");
+    pass.type = pass.type === "password" ? "text" : "password";
+}
+function toggleConfirmPassword(){
+    const pass = document.getElementById("confirmPassword");
     pass.type = pass.type === "password" ? "text" : "password";
 }
 </script>

@@ -16,6 +16,7 @@ String currentPage = request.getServletPath();
 <li class="nav-item">
     <a class="nav-link <%= currentPage.endsWith("index.jsp") ? "active" : "" %>" href="index.jsp">Home</a>
 </li>
+
 <li class="nav-item">
     <a class="nav-link <%= currentPage.endsWith("services.jsp") ? "active" : "" %>" href="services.jsp">Services</a>
 </li>
@@ -25,16 +26,8 @@ String currentPage = request.getServletPath();
 </li>
 
 <li class="nav-item">
-    <a class="nav-link <%= 
-        (currentPage.endsWith("login.jsp") || 
-         currentPage.endsWith("register.jsp") || 
-         currentPage.endsWith("forgot.jsp") || 
-         currentPage.endsWith("verify_otp.jsp.jsp") || 
-         currentPage.endsWith("reset_password.jsp")) 
-         ? "active" : "" %>" 
-       href="login.jsp">Login</a>
+    <a class="nav-link <%= currentPage.endsWith("login.jsp") ? "active" : "" %>" href="login.jsp">Login</a>
 </li>
-
 
 </ul>
 </div>
