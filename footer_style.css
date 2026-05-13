@@ -1,0 +1,24 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* This pushes footer down */
+.main-content {
+    flex: content;
+}
+
+/* Footer normal */
+footer {
+    background: #1e40af;
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto;   /* magic line */
+}
+
