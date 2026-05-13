@@ -1,188 +1,141 @@
 <%@ page import="java.sql.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-String admin = (String) session.getAttribute("admin");
-if(admin == null){
-    response.sendRedirect("login.jsp");
-    return;
-}
-%>
 
+<%
+    String user = (String) session.getAttribute("username");
+    if (user == null) {
+        response.sendRedirect("../visiter/index.jsp");
+        return;
+    }
+
+    String selectedId = request.getParameter("id");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>PlayArena | Booking Data</title>
+<title>PlayArena | Booking Form</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css"/>
-<link rel="stylesheet" href="../visiter/footer_style.css"/>
+<link rel="stylesheet" href="../visiter/style.css"/>
 </head>
-
 <body>
-
-<nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="index.jsp">PlayArena Admin</a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="adminMenu">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.jsp">Home</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="menage_sports.jsp">Manage Sports</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link  active" href="booking.jsp">Booking</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.jsp">Contact Us</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="feedback.jsp">Feedback</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="users.jsp">Users</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="logout.jsp">Logout</a>
-                </li>
-
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<!-- CONTENT -->
-<div class="container">
-<div class="admin-content">
-
-<h2 class="mb-4">Booking Data</h2>
-
-<div class="table-responsive">
-<table class="table table-bordered table-hover text-center">
-<thead>
-<tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Date</th>
-    <th>Start</th>
-    <th>End</th>
-    <th>Hour</th>
-    <th>Sport Name</th>
-    <th>Price</th>
-    <th>OTP</th>
-    <th>Update/Delete</th>
-    <th>Generate Bill</th>
-    <th>Total Bill</th>
-</tr>
-</thead>
-
-<tbody>
-
+<jsp:include page="head.jsp" />
+<!-- FORM -->
+<div class="container" style="margin-top:130px;">
+<div class="row justify-content-center">
+<div class="col-md-6">
+<div class="form-card">
+<h4 class="text-center mb-4">Booking Form</h4>
+<form method="post" action="sendOtp.jsp">
+<!-- NAME -->
+<div class="mb-3">
+<label>Full Name</label>
+<input type="text" name="bnm" class="form-control" required>
+</div>
+<!-- DATE -->
+<div class="mb-3">
+<label>Select Date</label>
+<input type="date" name="date" class="form-control" required>
+</div>
+<!-- TIME -->
+<div class="row">
+<div class="col-md-6 mb-3">
+<label>Start Time</label>
+<input type="time" name="st" id="st" class="form-control" onchange="calculateHours()" required>
+</div>
+<div class="col-md-6 mb-3">
+<label>End Time</label>
+<input type="time" name="et" id="et" class="form-control" onchange="calculateHours()" required>
+</div>
+</div>
+<!-- HOURS -->
+<div class="mb-3">
+<label>Total Hours</label>
+<input type="text" name="hu" id="hu" class="form-control" readonly>
+</div>
+<!-- SPORT DROPDOWN -->
+<div class="mb-3">
+<label>Select Sport</label>
+<select name="snm" id="sm" class="form-select" onchange="setPrice()" required>
+<option value="">-- Select Sport --</option>
 <%
-Connection con = null;
-Statement st = null;
-ResultSet rs = null;
-
 try{
     Class.forName("com.mysql.jdbc.Driver");
-    con = DriverManager.getConnection(
+    Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/db","root",""
     );
-
-    st = con.createStatement();
-    rs = st.executeQuery("SELECT * FROM f1");
+    Statement stmt = con.createStatement();
+    ResultSet rs = stmt.executeQuery("SELECT id, name, price FROM sports");
 
     while(rs.next()){
-
-        int id = rs.getInt("id");
-        int hours = rs.getInt("hu");
-
-        String priceStr = rs.getString("price");
-        priceStr = priceStr.replaceAll("[^0-9]", "");
-        int price = Integer.parseInt(priceStr);
-
-        int total = price * hours;
+        String sel = "";
+        if(selectedId != null && selectedId.equals(String.valueOf(rs.getInt("id")))){
+            sel = "selected";
+        }
 %>
-
-<tr>
-    <td><%=id%></td>
-    <td><%=rs.getString("bnm")%></td>
-    <td><%=rs.getString("date")%></td>
-    <td><%=rs.getString("st")%></td>
-    <td><%=rs.getString("et")%></td>
-    <td><%=hours%></td>
-    <td><%=rs.getString("snm")%></td>
-    <td>₹ <%=price%></td>
-    <td><%=rs.getString("otp")%></td>
-
-    <!-- Update/Delete -->
-    <td>
-        <a href="../crud/updatall.jsp?type=booking&id=<%=id%>"
-           class="btn btn-primary btn-sm">Update</a>
-
-        <a href="../crud/deleteall.jsp?type=booking&id=<%=id%>"
-           class="btn btn-danger btn-sm"
-           onclick="return confirm('Are you sure?')">Delete</a>
-    </td>
-
-    <!-- Generate Bill -->
-    <td>
-        <a href="generateBill.jsp?id=<%=id%>" 
-        target="_blank"
-        class="btn btn-success btn-sm">
-        Generate Bill
-        </a>
-    </td>
-
-    <!-- Total -->
-    <td>
-        ₹ <%=total%>
-    </td>
-</tr>
-
+<option value="<%= rs.getString("name") %>"
+        data-price="<%= rs.getString("price") %>"
+        <%= sel %>>
+    <%= rs.getString("name") %>
+</option>
 <%
     }
-
+    con.close();
 }catch(Exception e){
-    out.println("<tr><td colspan='12' class='text-danger'>"+e+"</td></tr>");
-}finally{
-    if(rs!=null) rs.close();
-    if(st!=null) st.close();
-    if(con!=null) con.close();
+%>
+<option>Error loading sports</option>
+<%
 }
 %>
-
-</tbody>
-
-</table>
+</select>
+</div>
+<!-- PRICE -->
+<div class="mb-4">
+<label>Price Per Hour</label>
+<input type="text" name="price" id="price" class="form-control" readonly>
+</div>
+<button type="submit" class="btn btn-book w-100 text-white">
+Book Now
+</button>
+</form>
 </div>
 
 </div>
 </div>
-<!-- ===== JS ===== -->
-<script>
-function generateBill(price, hours, cellId){
-    let total = price * hours;
-    document.getElementById(cellId).innerHTML = "₹ " + total;
-}
-</script>
-<!-- FOOTER -->
+</div>
+
 <jsp:include page="../visiter/footer.jsp" />
+
+<script>
+function calculateHours() {
+    let s = document.getElementById("st").value;
+    let e = document.getElementById("et").value;
+
+    if (s && e) {
+        let start = new Date("1970-01-01T" + s);
+        let end = new Date("1970-01-01T" + e);
+
+        if (end <= start) {
+            end.setDate(end.getDate() + 1);
+        }
+
+        let diff = (end - start) / (1000 * 60 * 60);
+        document.getElementById("hu").value = diff;
+    }
+}
+
+function setPrice(){
+    let sport = document.getElementById("sm");
+    let price = sport.options[sport.selectedIndex].getAttribute("data-price");
+    document.getElementById("price").value = price ? price : "";
+}
+
+window.onload = function() {
+    setPrice(); // auto fill price if sport pre-selected
+};
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
